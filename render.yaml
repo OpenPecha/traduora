@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: traduora
+    runtime: image
+    image:
+      # Use prebuilt or your own image
+      url: docker.io/traduora/traduora:latest
+    plan: starter
+    envVars:
+      - key: TR_ADMIN_EMAIL
+        value: tenkus@dharmaduta.in
+      - key: TR_ADMIN_PASSWORD
+        value: 12345678
+      - key: TR_ADMIN_NAME
+        value: Admin
+      - key: TR_SEED_DATA
+        value: "true"
+      # Postgres connection from Render DB
+      - key: DATABASE_URL
+        fromDatabase:
+          name: traduora-db
+          property: connectionString
+    disk:
+      name: traduora-data
+      mountPath: /app/data
+      sizeGB: 10
+    domains:
+      - translate.yourdomain.com
+
+databases:
+  - name: traduora-db
+    plan: basic-1gb
